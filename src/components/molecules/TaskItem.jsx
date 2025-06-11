@@ -17,9 +17,12 @@ return (
       className="bg-white rounded-card p-4 shadow-card cursor-pointer transition-all duration-200"
       onClick={() => onView && onView(task)}
     >
-      <div className="flex items-start space-x-4">
+<div className="flex items-start space-x-4">
         <button
-          onClick={() => onToggle(task.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle(task.id);
+          }}
           className={`mt-1 w-5 h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0 ${
             task.completed
               ? 'bg-success border-success text-white'
@@ -69,15 +72,21 @@ return (
             </div>
 
             {!isFromDashboard && ( // Only show edit/delete buttons if not on dashboard
-              <div className="flex items-center space-x-2 flex-shrink-0">
+<div className="flex items-center space-x-2 flex-shrink-0">
                 <button
-                  onClick={() => onEdit(task)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(task);
+                  }}
                   className="p-1 text-surface-400 hover:text-primary transition-colors"
                 >
                   <ApperIcon name="Edit" size={16} />
                 </button>
                 <button
-                  onClick={() => onDelete(task.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(task.id);
+                  }}
                   className="p-1 text-surface-400 hover:text-error transition-colors"
                 >
                   <ApperIcon name="Trash2" size={16} />

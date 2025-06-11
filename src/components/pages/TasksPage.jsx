@@ -9,15 +9,18 @@ import TaskSearchBar from '@/components/molecules/TaskSearchBar';
 import TaskFilters from '@/components/organisms/TaskFilters';
 import TaskList from '@/components/organisms/TaskList';
 import TaskModal from '@/components/organisms/TaskModal';
+import TaskDetailModal from '@/components/organisms/TaskDetailModal';
 import { taskService, projectService } from '@/services';
 
 const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
-  const [projects, setProjects] = useState([]);
+const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-const [error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTaskDetailModal, setShowTaskDetailModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     project: 'all',
@@ -85,11 +88,18 @@ const [error, setError] = useState(null);
         toast.error('Failed to delete task');
       }
     }
+}
   };
 
   const handleEditTask = (task) => {
     setEditingTask(task);
     setShowTaskModal(true);
+  };
+
+  const handleViewTask = (task) => {
+    if (!task) return;
+    setSelectedTask(task);
+    setShowTaskDetailModal(true);
   };
 
   const getPriorityColor = useCallback((priority) => {
@@ -109,12 +119,11 @@ const [error, setError] = useState(null);
   const getProjectName = useCallback((projectId) => {
     const project = projects.find(p => p.id === projectId);
     return project?.name || 'Unknown';
-  }, [projects]);
+}, [projects]);
 
-const isOverdue = useCallback((deadline, completed) => {
+  const isOverdue = useCallback((deadline, completed) => {
     return !completed && new Date(deadline) < new Date();
   }, []);
-
   const filteredAndSortedTasks = tasks
     .filter(task => {
       // Text search filter
@@ -199,9 +208,9 @@ const isOverdue = useCallback((deadline, completed) => {
   }
 
   return (
-    <div className="p-6 max-w-full overflow-hidden">
+<div className="p-6 max-w-full overflow-hidden">
       <motion.div
-initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-6"
       >
@@ -220,13 +229,13 @@ initial={{ opacity: 0, y: 20 }}
           setSortBy={setSortBy}
           projects={projects}
         />
-
-        <TaskList
+<TaskList
           tasks={filteredAndSortedTasks}
           onAddTask={() => setShowTaskModal(true)}
           onTaskToggle={handleTaskToggle}
           onEditTask={handleEditTask}
           onDeleteTask={handleTaskDelete}
+          onViewTask={handleViewTask}
           getPriorityColor={getPriorityColor}
           getProjectColor={getProjectColor}
           getProjectName={getProjectName}
@@ -243,6 +252,18 @@ initial={{ opacity: 0, y: 20 }}
         onSave={handleTaskSave}
         task={editingTask}
         projects={projects}
+      />
+      <TaskDetailModal
+        isOpen={showTaskDetailModal}
+        onClose={() => {
+          setShowTaskDetailModal(false);
+          setSelectedTask(null);
+        }}
+        task={selectedTask}
+        getProjectColor={getProjectColor}
+        getProjectName={getProjectName}
+        getPriorityColor={getPriorityColor}
+        isOverdue={isOverdue}
       />
     </div>
   );
