@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import ApperIcon from '../components/ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
-const NotFound = () => {
+const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -34,27 +35,27 @@ const NotFound = () => {
         </p>
         
         <div className="space-y-3">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/')}
-            className="w-full px-6 py-3 bg-primary text-white rounded-button hover:bg-primary-600 transition-colors shadow-sm"
-          >
-            Go to Dashboard
-          </motion.button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+            <Button
+              onClick={() => navigate('/')}
+              className="w-full px-6 py-3 bg-primary text-white rounded-button hover:bg-primary-600 transition-colors shadow-sm"
+            >
+              Go to Dashboard
+            </Button>
+          </motion.div>
           
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate(-1)}
-            className="w-full px-6 py-3 bg-surface-100 text-surface-700 rounded-button hover:bg-surface-200 transition-colors"
-          >
-            Go Back
-          </motion.button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full">
+            <Button
+              onClick={() => navigate(-1)}
+              className="w-full px-6 py-3 bg-surface-100 text-surface-700 rounded-button hover:bg-surface-200 transition-colors"
+            >
+              Go Back
+            </Button>
+          </motion.div>
         </div>
       </motion.div>
     </div>
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

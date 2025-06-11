@@ -1,6 +1,6 @@
-import Dashboard from '../pages/Dashboard';
-import Tasks from '../pages/Tasks';
-import Projects from '../pages/Projects';
+import DashboardPage from '@/components/pages/DashboardPage';
+import TasksPage from '@/components/pages/TasksPage';
+import ProjectsPage from '@/components/pages/ProjectsPage';
 
 export const routes = {
   dashboard: {
@@ -8,21 +8,24 @@ export const routes = {
     label: 'Dashboard',
     path: '/',
     icon: 'LayoutDashboard',
-    component: Dashboard
+icon: 'LayoutDashboard',
+    component: DashboardPage
   },
   tasks: {
     id: 'tasks',
     label: 'Tasks',
     path: '/tasks',
     icon: 'CheckSquare',
-    component: Tasks
+icon: 'CheckSquare',
+    component: TasksPage
   },
   projects: {
     id: 'projects',
     label: 'Projects',
     path: '/projects',
     icon: 'Folder',
-    component: Projects
+icon: 'Folder',
+    component: ProjectsPage
   }
 };
 
