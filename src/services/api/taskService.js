@@ -55,7 +55,7 @@ const taskService = {
     }).map(t => ({ ...t }));
   },
 
-  async create(taskData) {
+async create(taskData) {
     await delay(400);
     const newTask = {
       id: Date.now().toString(),
@@ -63,7 +63,9 @@ const taskService = {
       completed: false,
       completedAt: null,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      notes: taskData.notes || [],
+      subtasks: taskData.subtasks || []
     };
     tasks.push(newTask);
     return { ...newTask };
@@ -79,6 +81,93 @@ const taskService = {
       ...updates,
       updatedAt: new Date().toISOString()
     };
+    
+    return { ...tasks[index] };
+  },
+
+  // Note management
+  async addNote(taskId, noteText) {
+    await delay(200);
+    const index = tasks.findIndex(t => t.id === taskId);
+    if (index === -1) throw new Error('Task not found');
+    
+    const newNote = {
+      id: Date.now().toString(),
+      text: noteText,
+      createdAt: new Date().toISOString()
+    };
+    
+    if (!tasks[index].notes) {
+      tasks[index].notes = [];
+    }
+    
+    tasks[index].notes.push(newNote);
+    tasks[index].updatedAt = new Date().toISOString();
+    
+    return { ...tasks[index] };
+  },
+
+  async deleteNote(taskId, noteId) {
+    await delay(200);
+    const index = tasks.findIndex(t => t.id === taskId);
+    if (index === -1) throw new Error('Task not found');
+    
+    if (tasks[index].notes) {
+      tasks[index].notes = tasks[index].notes.filter(note => note.id !== noteId);
+      tasks[index].updatedAt = new Date().toISOString();
+    }
+    
+    return { ...tasks[index] };
+  },
+
+  // Subtask management
+  async addSubtask(taskId, subtaskTitle) {
+    await delay(200);
+    const index = tasks.findIndex(t => t.id === taskId);
+    if (index === -1) throw new Error('Task not found');
+    
+    const newSubtask = {
+      id: Date.now().toString(),
+      title: subtaskTitle,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    
+    if (!tasks[index].subtasks) {
+      tasks[index].subtasks = [];
+    }
+    
+    tasks[index].subtasks.push(newSubtask);
+    tasks[index].updatedAt = new Date().toISOString();
+    
+    return { ...tasks[index] };
+  },
+
+  async toggleSubtask(taskId, subtaskId) {
+    await delay(200);
+    const index = tasks.findIndex(t => t.id === taskId);
+    if (index === -1) throw new Error('Task not found');
+    
+    if (tasks[index].subtasks) {
+      const subtaskIndex = tasks[index].subtasks.findIndex(st => st.id === subtaskId);
+      if (subtaskIndex !== -1) {
+        tasks[index].subtasks[subtaskIndex].completed = !tasks[index].subtasks[subtaskIndex].completed;
+        tasks[index].updatedAt = new Date().toISOString();
+      }
+    }
+    
+    return { ...tasks[index] };
+  },
+
+  async deleteSubtask(taskId, subtaskId) {
+    await delay(200);
+    const index = tasks.findIndex(t => t.id === taskId);
+    if (index === -1) throw new Error('Task not found');
+    
+    if (tasks[index].subtasks) {
+      tasks[index].subtasks = tasks[index].subtasks.filter(subtask => subtask.id !== subtaskId);
+      tasks[index].updatedAt = new Date().toISOString();
+    }
     
     return { ...tasks[index] };
   },

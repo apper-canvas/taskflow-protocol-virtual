@@ -30,7 +30,7 @@ const TaskItem = ({ task, onToggle, onEdit, onDelete, getPriorityColor, getProje
           )}
         </button>
 
-        <div className="flex-1 min-w-0">
+<div className="flex-1 min-w-0">
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0 pr-4">
               <h3 className={`font-semibold break-words ${
@@ -44,6 +44,26 @@ const TaskItem = ({ task, onToggle, onEdit, onDelete, getPriorityColor, getProje
                 }`}>
                   {task.description}
                 </p>
+              )}
+              
+              {/* Notes and Subtasks indicators */}
+              {((task.notes && task.notes.length > 0) || (task.subtasks && task.subtasks.length > 0)) && (
+                <div className="flex items-center space-x-3 mt-2">
+                  {task.notes && task.notes.length > 0 && (
+                    <div className="flex items-center space-x-1 text-xs text-surface-500">
+                      <ApperIcon name="FileText" size={12} />
+                      <span>{task.notes.length} note{task.notes.length !== 1 ? 's' : ''}</span>
+                    </div>
+                  )}
+                  {task.subtasks && task.subtasks.length > 0 && (
+                    <div className="flex items-center space-x-1 text-xs text-surface-500">
+                      <ApperIcon name="CheckSquare" size={12} />
+                      <span>
+                        {task.subtasks.filter(st => st.completed).length}/{task.subtasks.length} subtasks
+                      </span>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
