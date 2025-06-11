@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "Work",
+    "color": "#4F46E5",
+    "icon": "Briefcase",
+    "taskCount": 4,
+    "createdAt": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "2", 
+    "name": "Personal",
+    "color": "#10B981",
+    "icon": "User",
+    "taskCount": 3,
+    "createdAt": "2024-12-01T10:00:00Z"
+  },
+  {
+    "id": "3",
+    "name": "Shopping",
+    "color": "#F59E0B",
+    "icon": "ShoppingCart",
+    "taskCount": 1,
+    "createdAt": "12/1/2024 10:00:00 AMZ"
+  }
+]

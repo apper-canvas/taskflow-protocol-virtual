@@ -1,0 +1,86 @@
+[
+  {
+    "id": "1",
+    "title": "Complete quarterly report presentation",
+    "description": "Finalize slides for Q4 performance review and prepare talking points for leadership meeting",
+    "priority": "high",
+    "projectId": "1",
+    "deadline": "2024-12-20T17:00:00Z",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-12-10T09:00:00Z",
+    "updatedAt": "2024-12-10T09:00:00Z"
+  },
+  {
+    "id": "2",
+    "title": "Schedule dentist appointment",
+    "description": "Book routine cleaning and checkup for early January",
+    "priority": "medium",
+    "projectId": "2",
+    "deadline": "2024-12-18T12:00:00Z",
+    "completed": true,
+    "completedAt": "2024-12-15T10:30:00Z",
+    "createdAt": "2024-12-08T14:20:00Z",
+    "updatedAt": "2024-12-15T10:30:00Z"
+  },
+  {
+    "id": "3",
+    "title": "Buy groceries for weekend dinner party",
+    "description": "Get ingredients for Italian menu: pasta, tomatoes, basil, mozzarella, wine",
+    "priority": "medium",
+    "projectId": "3",
+    "deadline": "2024-12-19T16:00:00Z",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-12-12T08:15:00Z",
+    "updatedAt": "2024-12-12T08:15:00Z"
+  },
+  {
+    "id": "4",
+    "title": "Review and approve marketing campaign designs",
+    "description": "Provide feedback on new product launch visuals and copy for Q1 campaign",
+    "priority": "high",
+    "projectId": "1",
+    "deadline": "2024-12-17T15:00:00Z",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-12-11T11:45:00Z",
+    "updatedAt": "2024-12-11T11:45:00Z"
+  },
+  {
+    "id": "5",
+    "title": "Clean and organize home office",
+    "description": "Declutter desk, file documents, and set up new organizational system",
+    "priority": "low",
+    "projectId": "2",
+    "deadline": "2024-12-22T20:00:00Z",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-12-09T16:30:00Z",
+    "updatedAt": "2024-12-09T16:30:00Z"
+  },
+  {
+    "id": "6",
+    "title": "Submit expense reports for November",
+    "description": "Compile receipts and complete expense submission in company portal",
+    "priority": "medium",
+    "projectId": "1",
+    "deadline": "2024-12-16T23:59:00Z",
+    "completed": true,
+    "completedAt": "2024-12-14T14:22:00Z",
+    "createdAt": "2024-12-07T13:10:00Z",
+    "updatedAt": "2024-12-14T14:22:00Z"
+  },
+  {
+    "id": "7",
+    "title": "Research and book holiday travel",
+    "description": "Compare flight options and hotel rates for New Year's trip to San Francisco",
+    "priority": "high",
+    "projectId": "2",
+    "deadline": "2024-12-18T20:00:00Z",
+    "completed": false,
+    "completedAt": null,
+    "createdAt": "2024-12-13T19:45:00Z",
+    "updatedAt": "2024-12-13T19:45:00Z"
+  }
+]

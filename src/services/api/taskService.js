@@ -1,0 +1,112 @@
+import taskData from '../mockData/tasks.json';
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+let tasks = [...taskData];
+
+const taskService = {
+  async getAll() {
+    await delay(300);
+    return [...tasks];
+  },
+
+  async getById(id) {
+    await delay(200);
+    const task = tasks.find(t => t.id === id);
+    return task ? { ...task } : null;
+  },
+
+  async getByProject(projectId) {
+    await delay(300);
+    return tasks.filter(t => t.projectId === projectId).map(t => ({ ...t }));
+  },
+
+  async getByPriority(priority) {
+    await delay(300);
+    return tasks.filter(t => t.priority === priority).map(t => ({ ...t }));
+  },
+
+  async getCompleted() {
+    await delay(300);
+    return tasks.filter(t => t.completed).map(t => ({ ...t }));
+  },
+
+  async getPending() {
+    await delay(300);
+    return tasks.filter(t => !t.completed).map(t => ({ ...t }));
+  },
+
+  async getOverdue() {
+    await delay(300);
+    const now = new Date();
+    return tasks.filter(t => !t.completed && new Date(t.deadline) < now).map(t => ({ ...t }));
+  },
+
+  async getDueToday() {
+    await delay(300);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    return tasks.filter(t => {
+      const deadline = new Date(t.deadline);
+      return deadline >= today && deadline < tomorrow;
+    }).map(t => ({ ...t }));
+  },
+
+  async create(taskData) {
+    await delay(400);
+    const newTask = {
+      id: Date.now().toString(),
+      ...taskData,
+      completed: false,
+      completedAt: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    tasks.push(newTask);
+    return { ...newTask };
+  },
+
+  async update(id, updates) {
+    await delay(400);
+    const index = tasks.findIndex(t => t.id === id);
+    if (index === -1) throw new Error('Task not found');
+    
+    tasks[index] = {
+      ...tasks[index],
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    
+    return { ...tasks[index] };
+  },
+
+  async toggleComplete(id) {
+    await delay(300);
+    const index = tasks.findIndex(t => t.id === id);
+    if (index === -1) throw new Error('Task not found');
+    
+    const completed = !tasks[index].completed;
+    tasks[index] = {
+      ...tasks[index],
+      completed,
+      completedAt: completed ? new Date().toISOString() : null,
+      updatedAt: new Date().toISOString()
+    };
+    
+    return { ...tasks[index] };
+  },
+
+  async delete(id) {
+    await delay(300);
+    const index = tasks.findIndex(t => t.id === id);
+    if (index === -1) throw new Error('Task not found');
+    
+    tasks.splice(index, 1);
+    return { success: true };
+  }
+};
+
+export default taskService;
