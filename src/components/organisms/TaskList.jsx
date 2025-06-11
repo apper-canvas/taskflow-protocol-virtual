@@ -4,7 +4,7 @@ import ApperIcon from '@/components/ApperIcon';
 import Button from '@/components/atoms/Button';
 import TaskItem from '@/components/molecules/TaskItem';
 
-const TaskList = ({ tasks, onAddTask, onTaskToggle, onEditTask, onDeleteTask, getPriorityColor, getProjectColor, getProjectName, isOverdue }) => {
+const TaskList = ({ tasks, onAddTask, onTaskToggle, onEditTask, onDeleteTask, onViewTask, getPriorityColor, getProjectColor, getProjectName, isOverdue }) => {
   return (
     <div className="space-y-3">
       {tasks.length === 0 ? (
@@ -31,7 +31,7 @@ const TaskList = ({ tasks, onAddTask, onTaskToggle, onEditTask, onDeleteTask, ge
           </motion.div>
         </motion.div>
       ) : (
-        <AnimatePresence>
+<AnimatePresence>
           {tasks.map((task, index) => (
             <TaskItem
               key={task.id}
@@ -39,6 +39,7 @@ const TaskList = ({ tasks, onAddTask, onTaskToggle, onEditTask, onDeleteTask, ge
               onToggle={onTaskToggle}
               onEdit={onEditTask}
               onDelete={onDeleteTask}
+              onView={onViewTask}
               getPriorityColor={getPriorityColor}
               getProjectColor={getProjectColor}
               getProjectName={getProjectName}

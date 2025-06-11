@@ -2,12 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ApperIcon from '@/components/ApperIcon';
 
-const TaskItem = ({ task, onToggle, onEdit, onDelete, getPriorityColor, getProjectColor, getProjectName, isOverdue, index, isFromDashboard }) => {
+const TaskItem = ({ task, onToggle, onEdit, onDelete, onView, getPriorityColor, getProjectColor, getProjectName, isOverdue, index, isFromDashboard }) => {
   const priorityColorClass = getPriorityColor(task.priority);
   const projectColorStyle = { backgroundColor: getProjectColor(task.projectId) };
   const overdueClass = isOverdue(task.deadline, task.completed) ? 'text-error' : 'text-surface-500';
 
-  return (
+return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -15,6 +15,7 @@ const TaskItem = ({ task, onToggle, onEdit, onDelete, getPriorityColor, getProje
       transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.01, boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)' }}
       className="bg-white rounded-card p-4 shadow-card cursor-pointer transition-all duration-200"
+      onClick={() => onView && onView(task)}
     >
       <div className="flex items-start space-x-4">
         <button
