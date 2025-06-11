@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import ApperIcon from '@/components/ApperIcon';
 import Button from '@/components/atoms/Button';
 import TasksHeader from '@/components/organisms/TasksHeader';
+import TaskSearchBar from '@/components/molecules/TaskSearchBar';
 import TaskFilters from '@/components/organisms/TaskFilters';
 import TaskList from '@/components/organisms/TaskList';
 import TaskModal from '@/components/organisms/TaskModal';
@@ -14,9 +15,10 @@ const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const [error, setError] = useState(null);
   const [showTaskModal, setShowTaskModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     project: 'all',
     priority: 'all',
@@ -109,31 +111,51 @@ const TasksPage = () => {
     return project?.name || 'Unknown';
   }, [projects]);
 
-  const isOverdue = useCallback((deadline, completed) => {
+const isOverdue = useCallback((deadline, completed) => {
     return !completed && new Date(deadline) < new Date();
   }, []);
 
   const filteredAndSortedTasks = tasks
     .filter(task => {
-      if (filters.project !== 'all' && task.projectId !== filters.project) return false;
-      if (filters.priority !== 'all' && task.priority !== filters.priority) return false;
-      if (filters.status === 'completed' && !task.completed) return false;
-      if (filters.status === 'pending' && task.completed) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'deadline':
-          return new Date(a.deadline) - new Date(b.deadline);
-        case 'priority':
-          const priorityOrder = { high: 3, medium: 2, low: 1 };
-          return priorityOrder[b.priority] - priorityOrder[a.priority];
-        case 'created':
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        default:
-          return 0;
+      // Text search filter
+      if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      const titleMatch = task.title.toLowerCase().includes(searchLower);
+      const descriptionMatch = task.description.toLowerCase().includes(searchLower);
+      const projectName = getProjectName(task.projectId).toLowerCase();
+      const projectMatch = projectName.includes(searchLower);
+      
+      if (!titleMatch && !descriptionMatch && !projectMatch) {
+        return false;
       }
-    });
+    }
+    
+    // Other filters
+    if (filters.project !== 'all' && task.projectId !== filters.project) return false;
+    if (filters.priority !== 'all' && task.priority !== filters.priority) return false;
+    if (filters.status === 'completed' && !task.completed) return false;
+    if (filters.status === 'pending' && task.completed) return false;
+    return true;
+  })
+  .sort((a, b) => {
+    switch (sortBy) {
+      case 'deadline':
+        return new Date(a.deadline) - new Date(b.deadline);
+      case 'priority':
+        const priorityOrder = { high: 3, medium: 2, low: 1 };
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+      case 'created':
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      case 'title':
+        return a.title.localeCompare(b.title);
+      case 'project':
+        const projectA = getProjectName(a.projectId);
+        const projectB = getProjectName(b.projectId);
+        return projectA.localeCompare(projectB);
+      default:
+        return 0;
+}
+  });
 
   if (loading) {
     return (
@@ -179,11 +201,17 @@ const TasksPage = () => {
   return (
     <div className="p-6 max-w-full overflow-hidden">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-6"
       >
         <TasksHeader onAddTask={() => setShowTaskModal(true)} />
+
+        <TaskSearchBar
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          projects={projects}
+        />
 
         <TaskFilters
           filters={filters}

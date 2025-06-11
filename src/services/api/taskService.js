@@ -193,9 +193,84 @@ async create(taskData) {
     const index = tasks.findIndex(t => t.id === id);
     if (index === -1) throw new Error('Task not found');
     
-    tasks.splice(index, 1);
-    return { success: true };
+tasks.splice(index, 1);
+return { success: true };
+},
+
+async search(query) {
+  await delay(300);
+  if (!query || query.trim().length === 0) {
+    return [...tasks];
   }
+
+  const searchTerm = query.toLowerCase().trim();
+  return tasks.filter(task => {
+    const titleMatch = task.title.toLowerCase().includes(searchTerm);
+    const descriptionMatch = task.description.toLowerCase().includes(searchTerm);
+    return titleMatch || descriptionMatch;
+  }).map(t => ({ ...t }));
+},
+
+async getSuggestions(query, projects = []) {
+  await delay(200);
+  if (!query || query.trim().length < 2) {
+    return [];
+  }
+
+  const searchTerm = query.toLowerCase().trim();
+  const suggestions = [];
+  const addedTexts = new Set(); // Prevent duplicates
+
+  // Search task titles
+  tasks.forEach(task => {
+    if (task.title.toLowerCase().includes(searchTerm)) {
+      const text = task.title;
+      if (!addedTexts.has(text.toLowerCase())) {
+        suggestions.push({
+          id: task.id,
+          type: 'task',
+          text: text,
+          subtitle: `in ${projects.find(p => p.id === task.projectId)?.name || 'Unknown Project'}`
+        });
+        addedTexts.add(text.toLowerCase());
+      }
+    }
+  });
+
+  // Search task descriptions
+  tasks.forEach(task => {
+    if (task.description.toLowerCase().includes(searchTerm)) {
+      const text = task.description;
+      if (!addedTexts.has(text.toLowerCase()) && suggestions.length < 8) {
+        suggestions.push({
+          id: task.id,
+          type: 'description',
+          text: text.length > 50 ? text.substring(0, 50) + '...' : text,
+          subtitle: `from "${task.title}"`
+        });
+        addedTexts.add(text.toLowerCase());
+      }
+    }
+  });
+
+  // Search project names
+  projects.forEach(project => {
+    if (project.name.toLowerCase().includes(searchTerm)) {
+      const text = project.name;
+      if (!addedTexts.has(text.toLowerCase()) && suggestions.length < 8) {
+        suggestions.push({
+          id: project.id,
+          type: 'project',
+          text: text,
+          subtitle: `Project`
+        });
+        addedTexts.add(text.toLowerCase());
+      }
+    }
+  });
+
+  return suggestions.slice(0, 8); // Limit to 8 suggestions
+}
 };
 
 export default taskService;
